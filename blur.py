@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 from colorama import Fore, Back, Style, init
 
-
+#WIP, testing
 def blur(rgb, blurLevel):
     if blurLevel == 0:
         rgb.show()

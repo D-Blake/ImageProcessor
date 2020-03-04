@@ -14,14 +14,17 @@ import getopt, sys
 from colorama import Fore, Back, Style, init
 from greyscale import rgb2gray
 from blur import blur
+from scale import scale
 
 def main():
     init(autoreset=True)
     print(Fore.CYAN + '-'*30)
-    opts, args = getopt.getopt(sys.argv[1:], "hi:o:x:", ["help","image=", "output=", "intensity="])
+    opts, args = getopt.getopt(sys.argv[1:], "hi:o:x:w:y:", ["help","image=", "output=", "intensity=","width=","height="])
     output = False
     imgURL = ""
     outputFile = ""
+    w=""
+    h=""
     blurLevel = 0
     #Debugging Lines
     print(opts)
@@ -48,17 +51,29 @@ def main():
             outputFile = arg
         elif opt in ("-x", "--intensity"):
             blurLevel = int(arg)
-            if blurLevel is not 0 or blurLevel is not 2 or blurLevel is not 1:
+            print("Blur Arg: " + arg)
+            print(int(arg))
+            if blurLevel != 0 and blurLevel != 2 and blurLevel != 1:
                 blurLevel = 0
+        elif opt in ("-w", "--width"):
+            w = int(arg)
+        elif opt in ("-y", "--height"):
+            h = int(arg)
 
     #Open and show original
-    im = Image.open(imgURL)
-    im.show()
+    try:
+        im = Image.open(imgURL)
+        im.show()
+    except:
+        print(Fore.RED + "Invalid Filepath or File Type")
     #Check for processing method
-    if(args[0] == "rgb2gray" or arg[0] == "rgb2grey"):
+    if(args[0] == "rgb2gray" or args[0] == "rgb2grey"):
         rgb2gray(im)
-    elif(arg[0] == "blur"):
+    elif(args[0] == "blur"):
+        print("Blur Level: " + str(blurLevel))
         blur(im,blurLevel)
+    elif(args[0] == "scale"):
+        scale(im,int(w),int(h))
     #Save if user wants to
     if output:
         im.save(outputFile)
